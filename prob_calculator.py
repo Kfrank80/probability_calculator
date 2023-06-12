@@ -1,55 +1,67 @@
 import random
+import sys
+
 
 class Hat:
 
     def __init__(self, **kwargs):
         self.balls_in_the_hat = {}
-        self.content: list[str] = []
+        self.contents: list[str] = []
         if kwargs.__len__() >= 1:
-            self.balls_in_the_hat = kwargs
+            self.balls_in_the_hat = dict(kwargs)
             for key, value in kwargs.items():
                 for it in range(0, value):
-                    self.content.append(key)
+                    self.contents.append(key)
                     pass
                 pass
             pass
         else:
             print("The hat most have at least one ball.\n"
                   "Nothing to do.")
+            sys.exit(1)
             pass
         pass
 
     def draw(self, num_balls_to_draw: int) -> list[str]:
         drawing: list[str] = list()
-        if num_balls_to_draw > len(self.content):
-            drawing = self.content
-            self.content.clear()
+        if num_balls_to_draw > len(self.contents):
+            drawing = self.contents.copy()
+            self.contents.clear()
             self.balls_in_the_hat.clear()
             pass
         else:
             for to_draw in range(0, num_balls_to_draw):
-                drawing.append(self.content.pop(random.randint(0, len(self.content) - 1)))
+                drawing.append(self.contents.pop(random.randint(0, len(self.contents) - 1)))
                 pass
-            for it in range(0, len(self.content)):
-                self.balls_in_the_hat[self.content[it]] = self.balls_in_the_hat[self.content[it]] - 1
+            for key in self.balls_in_the_hat.keys():
+                self.balls_in_the_hat[key] = 0
+                pass
+            for it in range(0, len(self.contents)):
+                self.balls_in_the_hat[self.contents[it]] += 1 # self.balls_in_the_hat[self.contents[it]] - 1
+                pass
+            for key in self.balls_in_the_hat.keys():
+                if self.balls_in_the_hat[key] == 0:
+                    self.balls_in_the_hat.pop(key)
+                    pass
                 pass
         return drawing
 
     def simulate_draw(self, num_balls_to_draw: int) -> list[str]:
         simulate_drawing: list[str] = list()
-        if num_balls_to_draw > len(self.content):
-            simulate_drawing = self.content
-            self.content.clear()
+        if num_balls_to_draw > len(self.contents):
+            simulate_drawing = self.contents
+            self.contents.clear()
             self.balls_in_the_hat.clear()
             pass
         else:
             for to_draw in range(0, num_balls_to_draw):
-                simulate_drawing.append(self.content[random.randint(0, len(self.content) - 1)])
+                simulate_drawing.append(self.contents[random.randint(0, len(self.contents) - 1)])
                 pass
-            for it in range(0, len(self.content)):
-                self.balls_in_the_hat[self.content[it]] = self.balls_in_the_hat[self.content[it]] - 1
+            for it in range(0, len(self.contents)):
+                self.balls_in_the_hat[self.contents[it]] = self.balls_in_the_hat[self.contents[it]] - 1
                 pass
         return simulate_drawing
+
     pass
 
 
